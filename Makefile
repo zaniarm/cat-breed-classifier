@@ -7,3 +7,8 @@ lint:
 
 test:
 	pytest tests
+
+format:
+	black src/*.py tests/*.py
+
+all: install lint test format
