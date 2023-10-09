@@ -11,4 +11,7 @@ test:
 format:
 	black src/*.py tests/*.py
 
+deploy:
+	echo "Deploy Placeholder"
+
 all: install lint test format
