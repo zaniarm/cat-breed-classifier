@@ -4,6 +4,8 @@ activate:
 install:
 	pip install --upgrade pip &&\
 		pip install -r requirements.txt
+isort:
+	src/*.py
 
 lint:
 	pylint --disable=R,C src
@@ -17,4 +19,4 @@ format:
 deploy:
 	echo "Deploy Placeholder"
 
-all: install lint test format
+all: install isort lint test format
