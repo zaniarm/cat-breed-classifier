@@ -1,7 +1,15 @@
+# Data
+data
+
 # DVC
 /config.local
 /tmp
 /cache
+outputs
+
+# IDE
+.idea
+.vscode
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
