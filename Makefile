@@ -5,10 +5,10 @@ install:
 	pip install --upgrade pip &&\
 		pip install -r requirements.txt
 isort:
-	src/*.py
+	isort src/
 
 lint:
-	pylint --disable=R,C src
+	flake8 src
 
 test:
 	pytest tests
@@ -19,4 +19,4 @@ format:
 deploy:
 	echo "Deploy Placeholder"
 
-all: install isort lint test format
+all: install format isort lint test
