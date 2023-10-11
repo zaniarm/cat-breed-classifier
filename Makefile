@@ -1,5 +1,5 @@
 activate:
-	venv\Scripts\activate
+	.venv\Scripts\activate
 
 install:
 	pip install --upgrade pip &&\
