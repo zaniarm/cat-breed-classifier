@@ -1,8 +1,8 @@
 import os
 from typing import List
 
-import pandas as pd
 import hydra
+import pandas as pd
 from hydra.utils import to_absolute_path as abspath
 from keras.applications.inception_v3 import InceptionV3
 from keras.layers import Dense, Dropout, GlobalAveragePooling2D
@@ -33,15 +33,16 @@ def generate_pandas_df(file_list: List[str]) -> pd.DataFrame:
         if label in labels_needed:
             file_paths.append(image_file)
             labels.append(label)
-
-    return pd.DataFrame(list(zip(file_paths, labels)), columns=["Filepath", "Labels"])
+    return pd.DataFrame(
+        list(zip(file_paths, labels)), columns=["Filepath", "Labels"]
+    )
 
 
 def load_data(config: CatBreedClassifierConfig):
     file_list = get_filelist(config)
     df = generate_pandas_df(file_list)
 
-    train_ratio = 0.75
+    # train_ratio = 0.75
     validation_ratio = 0.10
     test_ratio = 0.25
 
@@ -95,7 +96,7 @@ def load_data(config: CatBreedClassifierConfig):
     version_base=None,
 )
 def train(config: CatBreedClassifierConfig) -> None:
-    x_train, x_val, x_test = load_data(config)
+    x_train, x_val, _ = load_data(config)  # TODO: Load and use Test
 
     i_model = InceptionV3(
         weights="imagenet", include_top=False, input_shape=(299, 299, 3)
@@ -115,7 +116,7 @@ def train(config: CatBreedClassifierConfig) -> None:
         optimizer=Adam(), loss="categorical_crossentropy", metrics=["accuracy"]
     )
 
-    history = model.fit(
+    model.fit(
         x_train,
         validation_data=x_val,
         steps_per_epoch=len(x_train),
