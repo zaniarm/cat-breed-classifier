@@ -8,12 +8,15 @@ jobs:
       - name: Install dependencies
         run: |
           make install
+      - name: Format Python code (Black formatter)
+        run: |
+          make format
+      - name: Sort Python imports (isort)
+        run: |
+          make isort src/
       - name: Lint (pylint)
         run: |
           make lint
       - name: Test (pytest)
         run: |
           make test
-      - name: Format Python code (Black formatter)
-        run: |
-          make format
