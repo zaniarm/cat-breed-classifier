@@ -36,7 +36,7 @@ def get_data_frame(file_list: List[str], labels: List[str]) -> pd.DataFrame:
 
 
 @hydra.main(config_path="../config", config_name="main", version_base=None)
-def process_data(config: CatBreedClassifierConfig):
+def process_data(config: CatBreedClassifierConfig) -> None:
     file_list = load_data(config.paths.raw_images)
     df = get_data_frame(file_list, config.process.labels)
 

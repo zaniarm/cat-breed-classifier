@@ -60,17 +60,6 @@ def train(config: CatBreedClassifierConfig) -> None:
         seed=12,
     )
 
-    # TODO: Move to evaluation
-    # X_test = img_datagen.flow_from_dataframe(
-    #    dataframe=X_val,
-    #    x_col="filepath",
-    #    y_col="label",
-    #    target_size=(299, 299),
-    #   shuffle=False,
-    #   batch_size=30,
-    #    seed=12,
-    # )
-
     mlflow.tensorflow.autolog(registered_model_name="cat_breed_classifier")
 
     i_model = InceptionV3(
@@ -99,10 +88,7 @@ def train(config: CatBreedClassifierConfig) -> None:
         epochs=1,
     )
 
-    # TODO: move to evaluation step
-    # model.save(abspath(config.model.path))
-    # test_accuracy = model.evaluate(x_test)[1] * 100
-    # print("Test accuracy is : ", test_accuracy, "%")
+    model.save(abspath(config.model.path))
 
 
 if __name__ == "__main__":
