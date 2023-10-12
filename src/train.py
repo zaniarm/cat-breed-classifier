@@ -10,7 +10,7 @@ from keras.applications.inception_v3 import InceptionV3
 from keras.layers import Dense, Dropout, GlobalAveragePooling2D
 from keras.models import Sequential
 from keras.optimizers import Adam
-from keras_preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
 
 from config_classes import CatBreedClassifierConfig
