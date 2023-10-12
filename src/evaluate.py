@@ -1,11 +1,13 @@
-from config_classes import CatBreedClassifierConfig
-import pandas as pd
 from typing import List
+
 import hydra
-from hydra.utils import to_absolute_path as abspath
-import tensorflow as tf
-from keras.preprocessing.image import ImageDataGenerator
 import mlflow
+import pandas as pd
+import tensorflow as tf
+from hydra.utils import to_absolute_path as abspath
+from keras.preprocessing.image import ImageDataGenerator
+
+from config_classes import CatBreedClassifierConfig
 
 
 def load_data(config: CatBreedClassifierConfig) -> List[pd.DataFrame]:
@@ -42,7 +44,7 @@ def evaluate_model(config: CatBreedClassifierConfig):
         seed=12,
     )
 
-    with mlflow.active_run() as run:
+    with mlflow.active_run():
         test_accuracy = model.evaluate(X_test)[1] * 100
         mlflow.log_metric("test_accuracy", test_accuracy)
 

@@ -1,10 +1,12 @@
-from config_classes import CatBreedClassifierConfig
-from typing import List
-import hydra
-from hydra.utils import to_absolute_path as abspath
-import pandas as pd
 import os
+from typing import List
+
+import hydra
+import pandas as pd
+from hydra.utils import to_absolute_path as abspath
 from sklearn.model_selection import train_test_split
+
+from config_classes import CatBreedClassifierConfig
 
 
 def load_data(raw_path: str) -> List[str]:

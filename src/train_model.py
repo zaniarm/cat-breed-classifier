@@ -1,5 +1,8 @@
+from typing import List
+
 import hydra
 import mlflow
+import pandas as pd
 from dotenv import find_dotenv, load_dotenv
 from hydra.utils import to_absolute_path as abspath
 from keras.applications.inception_v3 import InceptionV3
@@ -7,9 +10,8 @@ from keras.layers import Dense, Dropout, GlobalAveragePooling2D
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
+
 from config_classes import CatBreedClassifierConfig
-from typing import List
-import pandas as pd
 
 load_dotenv(find_dotenv())
 
