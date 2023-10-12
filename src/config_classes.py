@@ -13,8 +13,15 @@ class ProceccedDataFormatConfig:
     path: str
 
 
+@dataclass
+class SplitConfigs:
+    test_ratio: float
+    validation_ratio: float
+
+
 class ProcessConfig:
     labels: List[str]
+    split_configs: SplitConfigs
 
 
 @dataclass

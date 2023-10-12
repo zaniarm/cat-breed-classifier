@@ -12,11 +12,11 @@ processed:
     name: X_train.csv
     path: ${processed.dir}/${processed.X_train.name}
   X_val:
-    name: X_train.csv
-    path: ${processed.dir}/${processed.X_train.name}
+    name: X_val.csv
+    path: ${processed.dir}/${processed.X_val.name}
   X_test:
-    name: X_train.csv
-    path: ${processed.dir}/${processed.X_train.name}
+    name: X_test.csv
+    path: ${processed.dir}/${processed.X_test.name}
 
 model:
   dir: models

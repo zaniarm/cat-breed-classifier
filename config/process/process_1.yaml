@@ -2,3 +2,7 @@ labels:
   - Abyssinian
   - Balinese
   - Tonkinese
+  
+split_configs:
+  test_ratio: 0.2
+  validation_ratio: 0.10
