@@ -2,7 +2,9 @@ import os
 from typing import List
 
 import hydra
+import mlflow
 import pandas as pd
+from dotenv import find_dotenv, load_dotenv
 from hydra.utils import to_absolute_path as abspath
 from keras.applications.inception_v3 import InceptionV3
 from keras.layers import Dense, Dropout, GlobalAveragePooling2D
@@ -13,18 +15,22 @@ from sklearn.model_selection import train_test_split
 
 from config_classes import CatBreedClassifierConfig
 
+load_dotenv(find_dotenv())
+
 
 def get_filelist(config: CatBreedClassifierConfig) -> List[str]:
     file_list = []
-    for dirname, _, filenames in os.walk(abspath(config.paths.data)):
+    for dirname, _, filenames in os.walk(abspath(config.paths.raw_images)):
         for filename in filenames:
             file_list.append(os.path.join(dirname, filename))
 
     return file_list
 
 
-def generate_pandas_df(file_list: List[str]) -> pd.DataFrame:
-    labels_needed = ["Abyssinian", "Balinese", "Tonkinese"]
+def generate_pandas_df(
+    file_list: List[str], config: CatBreedClassifierConfig
+) -> pd.DataFrame:
+    labels_needed = config.process.labels
     file_paths = []
     labels = []
 
@@ -33,14 +39,15 @@ def generate_pandas_df(file_list: List[str]) -> pd.DataFrame:
         if label in labels_needed:
             file_paths.append(image_file)
             labels.append(label)
+
     return pd.DataFrame(
-        list(zip(file_paths, labels)), columns=["Filepath", "Labels"]
+        list(zip(file_paths, labels)), columns=["filepath", "label"]
     )
 
 
 def load_data(config: CatBreedClassifierConfig):
     file_list = get_filelist(config)
-    df = generate_pandas_df(file_list)
+    df = generate_pandas_df(file_list, config)
 
     # train_ratio = 0.75
     validation_ratio = 0.10
@@ -61,8 +68,8 @@ def load_data(config: CatBreedClassifierConfig):
 
     x_train = img_datagen.flow_from_dataframe(
         dataframe=train,
-        x_col="Filepath",
-        y_col="Labels",
+        x_col="filepath",
+        y_col="label",
         target_size=(299, 299),
         shuffle=False,
         batch_size=30,
@@ -70,8 +77,8 @@ def load_data(config: CatBreedClassifierConfig):
     )
     x_val = img_datagen.flow_from_dataframe(
         dataframe=val,
-        x_col="Filepath",
-        y_col="Labels",
+        x_col="filepath",
+        y_col="label",
         target_size=(299, 299),
         shuffle=False,
         batch_size=30,
@@ -79,8 +86,8 @@ def load_data(config: CatBreedClassifierConfig):
     )
     x_test = img_datagen.flow_from_dataframe(
         dataframe=test,
-        x_col="Filepath",
-        y_col="Labels",
+        x_col="filepath",
+        y_col="label",
         target_size=(299, 299),
         shuffle=False,
         batch_size=30,
@@ -96,7 +103,8 @@ def load_data(config: CatBreedClassifierConfig):
     version_base=None,
 )
 def train(config: CatBreedClassifierConfig) -> None:
-    x_train, x_val, _ = load_data(config)  # TODO: Load and use Test
+    x_train, x_val, x_test = load_data(config)
+    mlflow.tensorflow.autolog(registered_model_name="cat_breed_classifier")
 
     i_model = InceptionV3(
         weights="imagenet", include_top=False, input_shape=(299, 299, 3)
@@ -121,5 +129,14 @@ def train(config: CatBreedClassifierConfig) -> None:
         validation_data=x_val,
         steps_per_epoch=len(x_train),
         validation_steps=len(x_val),
-        epochs=40,
+        epochs=1,
     )
+
+    model.save(abspath(config.model.path))
+    test_accuracy = model.evaluate(x_test)[1] * 100
+    print("Test accuracy is : ", test_accuracy, "%")
+
+
+if __name__ == "__main__":
+    print("running")
+    train()
