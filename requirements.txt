@@ -10,3 +10,4 @@ flake8==6.1.0
 mlflow==2.7.1
 python-dotenv==1.0.0
 tensorflow[and-cuda]
+dvc==3.25.0
