@@ -1,2 +1,24 @@
+defaults:
+  - process: process_1
+  - model: model_1
+  - _self_
+
 paths:
-  data: data/images
+  raw_images: data/images
+
+processed:
+  dir: data/processed
+  X_train:
+    name: X_train.csv
+    path: ${processed.dir}/${processed.X_train.name}
+  X_val:
+    name: X_val.csv
+    path: ${processed.dir}/${processed.X_val.name}
+  X_test:
+    name: X_test.csv
+    path: ${processed.dir}/${processed.X_test.name}
+
+model:
+  dir: models
+  name: cat_classifier
+  path: ${model.dir}/${model.name}.keras
