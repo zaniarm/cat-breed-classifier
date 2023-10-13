@@ -1,7 +1,9 @@
+from http import client
 from typing import List
 
 import hydra
 import mlflow
+import os
 import pandas as pd
 from dotenv import find_dotenv, load_dotenv
 from hydra.utils import to_absolute_path as abspath
@@ -10,6 +12,7 @@ from keras.layers import Dense, Dropout, GlobalAveragePooling2D
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
+from sklearn import experimental
 
 from config_classes import CatBreedClassifierConfig
 
@@ -62,8 +65,6 @@ def train(config: CatBreedClassifierConfig) -> None:
         seed=12,
     )
 
-    mlflow.tensorflow.autolog(registered_model_name="cat_breed_classifier")
-
     i_model = InceptionV3(
         weights="imagenet", include_top=False, input_shape=(299, 299, 3)
     )
@@ -81,6 +82,9 @@ def train(config: CatBreedClassifierConfig) -> None:
     model.compile(
         optimizer=Adam(), loss="categorical_crossentropy", metrics=["accuracy"]
     )
+
+    mlflow.set_tracking_uri(os.environ["MLFLOW_TRACKING_URI"])
+    mlflow.tensorflow.autolog(registered_model_name="cat-breed-classifier")
 
     model.fit(
         X_train,
