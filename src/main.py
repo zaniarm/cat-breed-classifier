@@ -1,10 +1,12 @@
-import hydra
 import os
+
+import hydra
+from dotenv import find_dotenv, load_dotenv
+
 from config_classes import CatBreedClassifierConfig
 from evaluate import evaluate_model
 from process import process_data
 from train_model import train
-from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 

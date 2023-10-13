@@ -1,16 +1,15 @@
 from typing import Any, List
 
 import hydra
-import mlflow
 import pandas as pd
 import tensorflow as tf
+from dotenv import find_dotenv, load_dotenv
 from hydra.utils import to_absolute_path as abspath
 from keras.preprocessing.image import ImageDataGenerator
-from dotenv import load_dotenv, find_dotenv
-
-load_dotenv(find_dotenv())
 
 from config_classes import CatBreedClassifierConfig
+
+load_dotenv(find_dotenv())
 
 
 def load_data(processed_X_test_path: str) -> List[pd.DataFrame]:

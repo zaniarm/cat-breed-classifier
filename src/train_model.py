@@ -1,9 +1,8 @@
-from http import client
+import os
 from typing import List
 
 import hydra
 import mlflow
-import os
 import pandas as pd
 from dotenv import find_dotenv, load_dotenv
 from hydra.utils import to_absolute_path as abspath
@@ -12,7 +11,6 @@ from keras.layers import Dense, Dropout, GlobalAveragePooling2D
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
-from sklearn import experimental
 
 from config_classes import CatBreedClassifierConfig
 
