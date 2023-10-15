@@ -3,7 +3,7 @@ import tensorflow as tf
 
 app = FastAPI()
 
-# Later, load correct model from MLflow and use that instead for predictions
+# Later, load correct model e.g. from MLflow and use that instead for predictions
 model = tf.keras.models.load_model("../models/cat_classifier.keras")
 
 
