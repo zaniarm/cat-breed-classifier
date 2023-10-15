@@ -1,8 +1,8 @@
 import os
+from pickle import dump
 from typing import List
 
 import hydra
-from pickle import dump
 import mlflow
 import pandas as pd
 from dotenv import find_dotenv, load_dotenv
