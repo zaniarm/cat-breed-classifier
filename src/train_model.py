@@ -2,6 +2,7 @@ import os
 from typing import List
 
 import hydra
+from pickle import dump
 import mlflow
 import pandas as pd
 from dotenv import find_dotenv, load_dotenv
@@ -35,6 +36,7 @@ def load_data(config: CatBreedClassifierConfig) -> List[pd.DataFrame]:
 def train(config: CatBreedClassifierConfig) -> None:
     X_train, X_val = load_data(config)
 
+    # Simple training for now, until full pipeline is ready
     img_datagen = ImageDataGenerator(
         rescale=1.0 / 255,
         rotation_range=30,
@@ -81,20 +83,24 @@ def train(config: CatBreedClassifierConfig) -> None:
         optimizer=Adam(), loss="categorical_crossentropy", metrics=["accuracy"]
     )
 
+    # Track on Dagshub with simple tensorflow autolog for now
     mlflow.set_tracking_uri(os.environ["MLFLOW_TRACKING_URI"])
     mlflow.tensorflow.autolog(registered_model_name="cat-breed-classifier")
 
-    model.fit(
+    history = model.fit(
         X_train,
         validation_data=X_val,
         steps_per_epoch=len(X_train),
         validation_steps=len(X_val),
-        epochs=1,
+        epochs=config.model.epochs,
     )
+
+    # Save history object for plotting
+    with open(abspath("data/processed/tf_history.pkl"), "wb") as file:
+        dump(history, file)
 
     model.save(abspath(config.model.path))
 
 
 if __name__ == "__main__":
-    print("running")
     train()
